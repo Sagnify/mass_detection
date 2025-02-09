@@ -7,7 +7,7 @@ def get_location():
     response = requests.get('http://ip-api.com/json/')
     data = response.json()
     return data['lat'], data['lon']
-
+ 
 lat, lon = get_location()
 
 # Load the pre-trained MobileNet-SSD model
