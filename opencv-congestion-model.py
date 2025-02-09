@@ -2,6 +2,20 @@ import cv2
 from datetime import datetime, timezone
 import requests
 import time
+import serial
+
+
+arduino = serial.Serial('COM8', 9600)
+time.sleep(2)  # Wait for the connection to establish
+
+def read_from_arduino():
+    while True:
+        data = arduino.readline().decode().strip()  # Read and decode data
+        if data:
+            print(f"Received: {data}")  # Print received data
+            return data  # Return the data
+        time.sleep(1)  # Wait before reading again
+
 
 def get_location():
     response = requests.get('http://ip-api.com/json/')
@@ -81,7 +95,8 @@ while True:
         "occupied_space": int(occupied_space),  # Convert to regular int
         "free_space": int(free_space),  # Convert to regular int
         "density": density,
-        "congestion_level": congestion_level
+        "congestion_level": congestion_level,
+        "water_level": read_from_arduino()
     }
 
     # Send data to server only after 2-minute interval
